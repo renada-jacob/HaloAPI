@@ -14,6 +14,8 @@ function Get-HaloAssetGroup {
     Param(
         # Asset Type ID
         [Parameter( ParameterSetName = 'Single', Mandatory = $True )]
+        [Parameter( ParameterSetName = 'Multi' )]
+        [Alias('assetgroup_id')]
         [int64]$AssetGroupID,
         # Paginate results
         [Parameter( ParameterSetName = 'Multi' )]
@@ -36,10 +38,6 @@ function Get-HaloAssetGroup {
         # Filter by AssetGroups with an asset type group like your search
         [Parameter( ParameterSetName = 'Multi' )]
         [string]$Search,
-        # Filter by Asset Types belonging to a particular Asset group
-        [Parameter( ParameterSetName = 'Multi' )]
-        [Alias('assetgroup_id')]
-        [int64]$AssetGroupID,
         # Include inactive Asset Types in the response
         [Parameter( ParameterSetName = 'Multi' )]
         [Switch]$includeinactive,
@@ -93,11 +91,11 @@ function Get-HaloAssetGroup {
                 QSCollection = $QSCollection
                 ResourceType = $Null
             }
-        }    
+        }
         $AssetGroupResults = New-HaloGETRequest @RequestParams
 
         if ($FullObjects) {
-            $AllAssetGroupResults = $AssetGroupResults | ForEach-Object {             
+            $AllAssetGroupResults = $AssetGroupResults | ForEach-Object {
                 Get-HaloAssetGroup -AssetGroupID $_.id
             }
             $AssetGroupResults = $AllAssetGroupResults
